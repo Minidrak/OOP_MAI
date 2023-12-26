@@ -45,7 +45,10 @@ public:
     Rectangle(Point2D const& first, Point2D const& second, Point2D const& third, Point2D const& fourth)
         : _first(first), _second(second), _third(third), _fourth(fourth)
     {
-      
+        if (!is_Valid_Rectangle(_first, _second, _third, _fourth)) {
+            throw std::logic_error("Error: Invalid rectangle coordinates.");
+            std::terminate(); 
+        }
     }
 
     double Area() const noexcept override
@@ -112,7 +115,10 @@ public:
     Trapezoid(Point2D const &first, Point2D const &second, Point2D const &third, Point2D const &fourth)
         : _first(first), _second(second), _third(third), _fourth(fourth)
     {
-   
+        if (!is_Valid_Trapezoid(_first, _second, _third, _fourth)) {
+            throw std::logic_error("Error: Invalid trapezoid coordinates.");
+            std::terminate(); 
+        }
     }
     
     double Area() const noexcept override
@@ -175,7 +181,10 @@ public:
     Rhombus(Point2D const &first, Point2D const &second, Point2D const &third, Point2D const &fourth)
         : _first(first), _second(second), _third(third), _fourth(fourth)
     {
-
+        if (!is_Valid_Rhombus(_first, _second, _third, _fourth)) {
+            throw std::logic_error("Error: Invalid rhombus coordinates.");
+            std::terminate(); 
+        }
     }
 
     double Area() const noexcept override
