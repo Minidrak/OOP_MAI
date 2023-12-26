@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 #include <exception>
-
+#include <gtest/gtest.h>
 
 class Figure
 {
@@ -129,7 +129,9 @@ public:
 
         double height = std::abs(_first.y - _third.y);
 
-        return ( (base1 + base2) / 2 ) * height;
+        double area = ( (base1 + base2) /2 ) * height;
+
+        return area;
     }
 
     Point2D Center() const noexcept override
@@ -229,8 +231,58 @@ public:
     }
 };
 
+TEST(RectangleTest, AreaAndCenter)
+{
+    Figure::Point2D A{0, 0};
+    Figure::Point2D B{2, 0};
+    Figure::Point2D C{2, 3};
+    Figure::Point2D D{0, 3};
 
-int main()
+    Rectangle rectangle(A, B, C, D);
+
+    EXPECT_DOUBLE_EQ(rectangle.Area(), 6.0);
+    
+    Figure::Point2D center = rectangle.Center();
+    EXPECT_DOUBLE_EQ(center.x, 1.0);
+    EXPECT_DOUBLE_EQ(center.y, 1.5);
+}
+
+TEST(TrapezoidTest, AreaAndCenter)
+{
+    Figure::Point2D A{1, 1};
+    Figure::Point2D B{2, 3};
+    Figure::Point2D C{5, 3};
+    Figure::Point2D D{6, 1};
+
+    Trapezoid trapezoid(A, B, C, D);
+
+    EXPECT_DOUBLE_EQ(trapezoid.Area(), 5.2360679774997898);
+    
+    Figure::Point2D center = trapezoid.Center();
+    EXPECT_DOUBLE_EQ(center.x, 3.5);
+    EXPECT_DOUBLE_EQ(center.y, 2.0);
+}
+
+TEST(RhombusTest, AreaAndCenter)
+{
+    Figure::Point2D A{0, 0};
+    Figure::Point2D B{0, 10};
+    Figure::Point2D C{10, 10};
+    Figure::Point2D D{10, 0};
+
+    Rhombus rhombus(A, B, C, D);
+
+    EXPECT_DOUBLE_EQ(rhombus.Area(), 100.0);
+    
+    Figure::Point2D center = rhombus.Center();
+    EXPECT_DOUBLE_EQ(center.x, 5.0);
+    EXPECT_DOUBLE_EQ(center.y, 5.0);
+}
+
+
+
+
+int main(int argc, char ** argv)
 {
     const int maxFigures = 100;
     Figure * figures[maxFigures];
@@ -268,7 +320,7 @@ int main()
                 std::cout << "Создан прямоугольник:" << std::endl;
                 std::cout << *rectangle << std::endl;
                 std::cout << "Центр масс: (" << rectangle->Center().x << ", " << rectangle->Center().y << ")" << std::endl;
-                std::cout << "Площадь: " << rectangle->Area() << std::endl;
+                std::cout << "Площадь: " <<std::fixed<< std::setprecision(4)<< rectangle->Area() << std::endl;
 
                 break;
             }
@@ -290,7 +342,7 @@ int main()
                 std::cout << "Создан трапеция:" << std::endl;
                 std::cout << *trapezoid << std::endl; 
                 std::cout << "Центр масс: (" << trapezoid->Center().x << ", " << trapezoid->Center().y << ")" << std::endl;
-                std::cout << "Площадь: " << trapezoid->Area() << std::endl;
+                std::cout << "Площадь: " << std::fixed<<std::setprecision(4) << trapezoid->Area() << std::endl;
 
                 break;
             }
@@ -313,7 +365,7 @@ int main()
                 std::cout << "Создан ромб:" << std::endl;
                 std::cout << *rhombus << std::endl; 
                 std::cout << "Центр масс: (" << rhombus->Center().x << ", " << rhombus->Center().y << ")" << std::endl;
-                std::cout << "Площадь: " << rhombus->Area() << std::endl;
+                std::cout << "Площадь: " << std::fixed << std::setprecision(4) << rhombus->Area() << std::endl;
 
                 break;
             }
@@ -340,6 +392,14 @@ int main()
                 std::cout << "Общая площадь всех фигур: " << totalArea << std::endl;
                 break;
             }
+
+            case 9:
+            {
+                ::testing::InitGoogleTest(&argc, argv);
+                RUN_ALL_TESTS();
+                return 0;
+            }
+
             case 0:
                 // Свободу памяти
                 for (int i = 0; i< figureCount;++i)
