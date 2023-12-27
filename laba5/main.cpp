@@ -2,7 +2,7 @@
 #include <map>
 #include <array>
 
-// Шаблон класса аллокатора
+// Allocator
 template <typename T, size_t N>
 class MyAllocator {
 public:
@@ -31,8 +31,7 @@ public:
     }
 
     void deallocate(T*, std::size_t) noexcept {
-        // Освобождение всей выделенной памяти
-        position_ = memory_.begin();
+        
     }
 
 private:
@@ -40,7 +39,7 @@ private:
     typename std::array<T, N>::iterator position_;
 };
 
-// Шаблон класса двунаправленного списка
+// List
 template <typename T, typename Allocator = std::allocator<T>>
 class MyList {
 private:
@@ -52,7 +51,7 @@ private:
     };
 
 public:
-    // Реализация итератора
+    // Iterator
     class Iterator {
     public:
         using iterator_category = std::forward_iterator_tag;
@@ -134,23 +133,17 @@ private:
 };
 
 int main() {
-    // Создание экземпляра std::map с созданным аллокатором
     std::map<int, int, std::less<int>, MyAllocator<std::pair<const int, int>, 10>> myMapAllocator;
 
-    // Заполнение 10 элементами, где ключ — это число от 0 до 9, а значение - факториал ключа
     for (int i = 0; i < 10; ++i) {
         myMapAllocator[i] = (i == 0) ? 1 : i * myMapAllocator[i - 1];
     }
 
-    // Вывод на экран всех значений (ключ и значение разделены пробелом) хранящихся в контейнере
     for (const auto& pair : myMapAllocator) {
         std::cout << pair.first << " " << pair.second << std::endl;
     }
 
-    // Создание экземпляра своего контейнера для хранения int с собственным аллокатором
     MyList<int, MyAllocator<int, 10>> myListAllocator;
-
-    // Заполнение контейнера и печать его элементов
     for (int i = 0; i < 10; ++i) {
         myListAllocator.push_back(i);
     }
