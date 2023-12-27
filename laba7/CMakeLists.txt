@@ -1,0 +1,10 @@
+cmake_minimum_required(VERSION 3.10)
+project(laba7)
+find_package(GTest REQUIRED)
+include_directories(${GTEST_INCLUDE_DIRS})
+add_executable(laba7_exe main.cpp npc.cpp vip.cpp bear.cpp muskrat.cpp)
+enable_testing()
+add_executable(laba7_test tests.cpp)
+target_link_libraries(laba7_test ${GTEST_LIBRARIES})
+
+add_test(NAME BASIC COMMAND laba7_test)
